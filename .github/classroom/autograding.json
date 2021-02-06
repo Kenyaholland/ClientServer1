@@ -1,0 +1,44 @@
+{
+	"tests": [
+		{
+			"name": "Single request test",
+			"setup": "",
+			"run": "timeout 60 ./singleRequestTest",
+			"input": "",
+			"output": "",
+			"comparison": "included",
+			"timeout": 60,
+			"points": 30
+		},
+		{
+			"name": "Invalid url test",
+			"setup": "",
+			"run": "timeout 60 ./invalidUrlTest",
+			"input": "",
+			"output": "",
+			"comparison": "included",
+			"timeout": 60,
+			"points": 30
+		},
+		{
+			"name": "Multiple requests test",
+			"setup": "",
+			"run": "timeout 60 ./multipleAndInvalidRequestTest",
+			"input": "",
+			"output": "",
+			"comparison": "included",
+			"timeout": 60,
+			"points": 20
+		},
+		{
+			"name": "Test for correct function calls",
+			"setup": "",
+			"run": "timeout 10 bash .github/testCode.bash",
+			"input": "",
+			"output": "",
+			"comparison": "included",
+			"timeout": 60,
+			"points": 10
+		}
+	]
+}
