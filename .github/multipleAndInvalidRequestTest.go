@@ -99,7 +99,7 @@ func main() {
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testResult = testWithMessage(6363, "sdfsdfasdfekdsafjlksdfkji", 3, "invalidUrl")
+	testResult = testWithMessage(6363, "Not found", 3, "invalidUrl")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
