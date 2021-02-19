@@ -90,15 +90,15 @@ func main() {
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(45654, "Not found", "messag")
+	testResult = testWithMessage(45654, "Not found", "messag")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(47417, "Not found", "messageA")
+	testResult = testWithMessage(47417, "Not found", "messageA")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(47418, "Not found", "")
+	testResult = testWithMessage(47418, "Not found", "")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}

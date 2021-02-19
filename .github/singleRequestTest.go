@@ -84,11 +84,11 @@ func main() {
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(3525, "kasdjflkdfjoiclkj3k45jryxcv")
+	testResult = testWithMessage(3525, "kasdjflkdfjoiclkj3k45jryxcv")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(2525, "sdfsdfasdfekdsafjlksdfkji")
+	testResult = testWithMessage(2525, "sdfsdfasdfekdsafjlksdfkji")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}

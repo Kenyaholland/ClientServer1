@@ -91,15 +91,15 @@ func main() {
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(3236, "kasdjflkdfjoiclkj3k45jryxcv", 10, "message")
+	testResult = testWithMessage(3236, "kasdjflkdfjoiclkj3k45jryxcv", 10, "message")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(5678, "sdfsdfasdfekdsafjlksdfkji", 50, "message")
+	testResult = testWithMessage(5678, "sdfsdfasdfekdsafjlksdfkji", 50, "message")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
-	testWithMessage(6363, "sdfsdfasdfekdsafjlksdfkji", 3, "invalidUrl")
+	testResult = testWithMessage(6363, "sdfsdfasdfekdsafjlksdfkji", 3, "invalidUrl")
 	if testResult != 0 {
 		os.Exit(testResult)
 	}
