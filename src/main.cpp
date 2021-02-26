@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
     int port = atoi(argv[1]);
     char* message = (char*)argv[2];
 
-    char tcp_server_message[256] = "HTTP/1.1 200 Okay\r\nContent-Type: text/html; charset=ISO-8859-4 \r\n\r\n<title>Highly sensitive data</title></head><body><p> Hello, I am the TCP Server you successfully connected to!! \n\n               Bye Bye!!!\n\n</p></body></html>";
+    char tcp_server_message[370] = "HTTP/1.1 200 OK\r\nContent-Length: 217 Content-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p> Hello, I am the TCP Server you successfully connected to!! \n\n               Bye Bye!!!\n\n</p></body></html>";
 
     //create the server socket
     int tcp_server_socket;                                  //variable for the socket descriptor
