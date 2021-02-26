@@ -14,13 +14,19 @@
 #include <netinet/in.h>     //Structures to store address information
 #include <unistd.h>         //close function
 #include <string.h>         //strlen
+#include <string>
 
 int main(int argc, char const *argv[])
 {
 
     int port = atoi(argv[1]);
+    std::string message(argv[2]);
+    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 217 Content-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
+    std::string http2 = "</p></body></html>";
+    std::string fullMessage = http1 + message + http2;
 
-    char tcp_server_message[400] = "HTTP/1.1 200 OK\r\nContent-Length: 217 Content-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p> Hello, I am the TCP Server you successfully connected to!! \n\n Bye Bye!!!\n\n</p></body></html>";
+    char tcp_server_message[400];
+    strcpy(tcp_server_message, fullMessage.c_str());
 
     //create the server socket
     int tcp_server_socket;                                  //variable for the socket descriptor
