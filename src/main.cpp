@@ -19,9 +19,8 @@ int main(int argc, char const *argv[])
 {
 
     int port = atoi(argv[1]);
-    char* message = (char*)argv[2];
 
-    char tcp_server_message[370] = "HTTP/1.1 200 OK\r\nContent-Length: 217 Content-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p> Hello, I am the TCP Server you successfully connected to!! \n\n               Bye Bye!!!\n\n</p></body></html>";
+    char tcp_server_message[400] = "HTTP/1.1 200 OK\r\nContent-Length: 217 Content-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p> Hello, I am the TCP Server you successfully connected to!! \n\n Bye Bye!!!\n\n</p></body></html>";
 
     //create the server socket
     int tcp_server_socket;                                  //variable for the socket descriptor
@@ -41,6 +40,10 @@ int main(int argc, char const *argv[])
 
     int tcp_client_socket;
     tcp_client_socket = accept(tcp_server_socket, NULL, NULL);  // server socket to interact with client, structure like before - if you know - else NULL for local connection
+
+    //recieve data stream
+    char tcp_server_response[256] = "GET / HTTP/1.1\r\nHost: 127.0.0.1:5678\r\nUser-Agent: Go-http-client/1.1\r\nAccept-Encoding: gzip";
+    recv(tcp_client_socket, &tcp_server_response, sizeof(tcp_server_response), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
 
     //send data stream
     send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
