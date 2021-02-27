@@ -21,12 +21,18 @@ int main(int argc, char const *argv[])
 
     int port = atoi(argv[1]);
     std::string message(argv[2]);
-    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 217 Content-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
-    std::string http2 = "</p></body></html>";
+    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 233\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n<meta charset=\"UTF-8\"/>\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n<title>Highly sensitive data</title>\r\n</head>\r\n<body>\r\n<p>";
+    std::string http2 = "</p>\r\n</body>\r\n</html>";
     std::string fullMessage = http1 + message + http2;
 
     char tcp_server_message[400];
     strcpy(tcp_server_message, fullMessage.c_str());
+
+    //printf("%s \n", tcp_server_message);
+
+    char tcp_server_message_invalid[400] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 218\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n<meta charset=\"UTF-8\"/>\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n<title>Highly sensitive data</title>\r\n</head>\r\n<body>\r\n<p>Not found</p>\r\n</body>\r\n</html>";
+
+    //printf("%s \n", tcp_server_message_invalid);
 
     //create the server socket
     int tcp_server_socket;                                  //variable for the socket descriptor
@@ -48,11 +54,19 @@ int main(int argc, char const *argv[])
     tcp_client_socket = accept(tcp_server_socket, NULL, NULL);  // server socket to interact with client, structure like before - if you know - else NULL for local connection
 
     //recieve data stream
-    char tcp_server_response[256] = "GET / HTTP/1.1\r\nHost: 127.0.0.1:5678\r\nUser-Agent: Go-http-client/1.1\r\nAccept-Encoding: gzip";
+    char tcp_server_response[256];
     recv(tcp_client_socket, &tcp_server_response, sizeof(tcp_server_response), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
 
-    //send data stream
-    send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
+    //printf("%s \n", tcp_server_response);
+
+    if(tcp_server_response[5] == 'm'){
+        //send data stream
+        send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
+    }
+    else{
+        //send invalid data stream
+        send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
+    }
 
     //close the socket
     close(tcp_server_socket);
