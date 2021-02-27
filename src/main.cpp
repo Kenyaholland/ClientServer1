@@ -21,13 +21,18 @@ int main(int argc, char const *argv[])
 
     int port = atoi(argv[1]);
     std::string message(argv[2]);
-    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 225\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
-    std::string http2 = "</p></body></html>";
-    std::string fullMessage = http1 + message + http2;
+    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 217\r\nContent-Type: text/html; charset=utf-8\r\n\r\n";
+    std::string http2 = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
+    std::string http3 = "</p></body></html>";
+
+    std::string fullMessage = http2 + message + http3;
+    int content_length = fullMessage.length();
+    fullMessage = http1 + fullMessage;
+    fullMessage.replace(33,3, std::to_string(content_length));
 
     char tcp_server_message[2048];
     strcpy(tcp_server_message, fullMessage.c_str());
-
+    
     //printf("%s \n", tcp_server_message);
 
     char tcp_server_message_invalid[2048] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 210\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>Not found</p></body></html>";
@@ -59,14 +64,19 @@ int main(int argc, char const *argv[])
 
     //printf("%s \n", tcp_request);
 
-    //if(tcp_request[5] == 'm'){
+    //check that /message exists in tcp_request to know to send a valid or invalid server response
+    std::string request(tcp_request);
+    std::string findMessage = "message";
+    bool found = request.find(findMessage);
+
+    if(found){
         //send data stream
         send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
-    //}
-    //else{
+    }
+    else{
         //send invalid data stream
-        //send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
-    //}
+        send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
+    }
 
     //close the socket
     close(tcp_server_socket);
