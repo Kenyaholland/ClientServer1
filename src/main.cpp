@@ -21,16 +21,16 @@ int main(int argc, char const *argv[])
 
     int port = atoi(argv[1]);
     std::string message(argv[2]);
-    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 233\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n<meta charset=\"UTF-8\"/>\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n<title>Highly sensitive data</title>\r\n</head>\r\n<body>\r\n<p>";
-    std::string http2 = "</p>\r\n</body>\r\n</html>";
+    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 233\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
+    std::string http2 = "</p></body></html>";
     std::string fullMessage = http1 + message + http2;
 
-    char tcp_server_message[400];
+    char tcp_server_message[2048];
     strcpy(tcp_server_message, fullMessage.c_str());
 
     //printf("%s \n", tcp_server_message);
 
-    char tcp_server_message_invalid[400] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 218\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html>\r\n<html lang=\"en\">\r\n<head>\r\n<meta charset=\"UTF-8\"/>\r\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\r\n<title>Highly sensitive data</title>\r\n</head>\r\n<body>\r\n<p>Not found</p>\r\n</body>\r\n</html>";
+    char tcp_server_message_invalid[2048] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 218\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>Not found</p></body></html>";
 
     //printf("%s \n", tcp_server_message_invalid);
 
@@ -54,12 +54,12 @@ int main(int argc, char const *argv[])
     tcp_client_socket = accept(tcp_server_socket, NULL, NULL);  // server socket to interact with client, structure like before - if you know - else NULL for local connection
 
     //recieve data stream
-    char tcp_server_response[256];
-    recv(tcp_client_socket, &tcp_server_response, sizeof(tcp_server_response), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
+    char tcp_request[2048];
+    recv(tcp_client_socket, &tcp_request, sizeof(tcp_request), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
 
-    //printf("%s \n", tcp_server_response);
+    //printf("%s \n", tcp_request);
 
-    if(tcp_server_response[5] == 'm'){
+    if(tcp_request[5] == 'm'){
         //send data stream
         send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
     }
