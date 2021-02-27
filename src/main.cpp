@@ -15,11 +15,14 @@
 #include <unistd.h>         //close function
 #include <string.h>         //strlen
 #include <string>
+#include <cstring>
+#include <iostream>
 
 int main(int argc, char const *argv[])
 {
 
     int port = atoi(argv[1]);
+    
     std::string message(argv[2]);
     std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 217\r\nContent-Type: text/html; charset=utf-8\r\n\r\n";
     std::string http2 = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
@@ -67,7 +70,9 @@ int main(int argc, char const *argv[])
     //check that /message exists in tcp_request to know to send a valid or invalid server response
     std::string request(tcp_request);
     std::string findMessage = "message";
-    bool found = request.find(findMessage);
+    const char* found = strstr(request.c_str(),findMessage.c_str());
+
+    //std::cout << request << std::endl;
 
     if(found){
         //send data stream
