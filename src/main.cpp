@@ -60,27 +60,30 @@ int main(int argc, char const *argv[])
 
     int tcp_client_socket;
     tcp_client_socket = accept(tcp_server_socket, NULL, NULL);  // server socket to interact with client, structure like before - if you know - else NULL for local connection
+    
+    while(true){
 
-    //recieve data stream
-    char tcp_request[2048];
-    recv(tcp_client_socket, &tcp_request, sizeof(tcp_request), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
+        //recieve data stream
+        char tcp_request[2048];
+        recv(tcp_client_socket, &tcp_request, sizeof(tcp_request), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
 
-    //printf("%s \n", tcp_request);
+        //printf("%s \n", tcp_request);
 
-    //check that /message exists in tcp_request to know to send a valid or invalid server response
-    std::string request(tcp_request);
-    std::string findMessage = "message ";
-    const char* found = strstr(request.c_str(),findMessage.c_str());
+        //check that /message exists in tcp_request to know to send a valid or invalid server response
+        std::string request(tcp_request);
+        std::string findMessage = "message ";
+        const char* found = strstr(request.c_str(),findMessage.c_str());
 
-    //std::cout << request << std::endl;
+        //std::cout << request << std::endl;
 
-    if(found){
-        //send data stream
-        send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
-    }
-    else{
-        //send invalid data stream
-        send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
+        if(found){
+            //send data stream
+            send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
+        }
+        else{
+            //send invalid data stream
+            send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
+        }
     }
 
     //close the server socket
