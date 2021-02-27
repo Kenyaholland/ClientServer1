@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
 
     int port = atoi(argv[1]);
     std::string message(argv[2]);
-    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 233\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
+    std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 225\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
     std::string http2 = "</p></body></html>";
     std::string fullMessage = http1 + message + http2;
 
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
 
     //printf("%s \n", tcp_server_message);
 
-    char tcp_server_message_invalid[2048] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 218\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>Not found</p></body></html>";
+    char tcp_server_message_invalid[2048] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 210\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>Not found</p></body></html>";
 
     //printf("%s \n", tcp_server_message_invalid);
 
@@ -59,14 +59,14 @@ int main(int argc, char const *argv[])
 
     //printf("%s \n", tcp_request);
 
-    if(tcp_request[5] == 'm'){
+    //if(tcp_request[5] == 'm'){
         //send data stream
         send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
-    }
-    else{
+    //}
+    //else{
         //send invalid data stream
-        send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
-    }
+        //send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
+    //}
 
     //close the socket
     close(tcp_server_socket);
