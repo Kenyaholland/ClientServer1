@@ -16,13 +16,9 @@
 #include <string.h>         //strlen
 #include <string>
 #include <cstring>
-#include <iostream>
 
 int main(int argc, char const *argv[])
 {
-
-    int port = atoi(argv[1]);
-
     std::string message(argv[2]);
     std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 217\r\nContent-Type: text/html; charset=utf-8\r\n\r\n";
     std::string http2 = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
@@ -35,12 +31,8 @@ int main(int argc, char const *argv[])
 
     char tcp_server_message[2048];
     strcpy(tcp_server_message, fullMessage.c_str());
-    
-    //printf("%s \n", tcp_server_message);
 
     char tcp_server_message_invalid[2048] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 210\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>Not found</p></body></html>";
-
-    //printf("%s \n", tcp_server_message_invalid);
 
     //create the server socket
     int tcp_server_socket;                                  //variable for the socket descriptor
@@ -49,7 +41,7 @@ int main(int argc, char const *argv[])
     //define the server address
     struct sockaddr_in tcp_server_address;                  //declaring a structure for the address
     tcp_server_address.sin_family = AF_INET;                //Structure Fields' definition: Sets the address family of the address the client would connect to
-    tcp_server_address.sin_port = htons(port);             //Passing the port number - converting in right network byte order
+    tcp_server_address.sin_port = htons(atoi(argv[1]));             //Passing the port number - converting in right network byte order
     tcp_server_address.sin_addr.s_addr = INADDR_ANY;        //Connecting to 0.0.0.0
 
     // binding the socket to the IP address and port
@@ -67,15 +59,12 @@ int main(int argc, char const *argv[])
         char tcp_request[2048];
         recv(tcp_client_socket, &tcp_request, sizeof(tcp_request), 0);   // params: where (socket), what (string), how much - size of the server response, flags (0)
 
-        //printf("%s \n", tcp_request);
-
         //check that /message exists in tcp_request to know to send a valid or invalid server response
         std::string request(tcp_request);
         std::string findMessage = "message ";
         const char* found = strstr(request.c_str(),findMessage.c_str());
 
-        //std::cout << request << std::endl;
-
+        //if found is not null
         if(found){
             //send data stream
             send(tcp_client_socket, tcp_server_message, strlen(tcp_server_message), 0);  // send where, what, how much, flags (optional)
