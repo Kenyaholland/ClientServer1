@@ -83,8 +83,11 @@ int main(int argc, char const *argv[])
         send(tcp_client_socket, tcp_server_message_invalid, strlen(tcp_server_message_invalid), 0);  // send where, what, how much, flags (optional)
     }
 
-    //close the socket
+    //close the server socket
     close(tcp_server_socket);
+
+    //close the client socket
+    close(tcp_client_socket);
 
     return 0;
 }
