@@ -19,19 +19,24 @@
 
 int main(int argc, char const *argv[])
 {
+    //Seperate server response to get correct content length for whatever message is sent
     std::string message(argv[2]);
     std::string http1 = "HTTP/1.1 200 OK\r\nContent-Length: 217\r\nContent-Type: text/html; charset=utf-8\r\n\r\n";
     std::string http2 = "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>";
     std::string http3 = "</p></body></html>";
 
+    //combine the strings
     std::string fullMessage = http2 + message + http3;
     int content_length = fullMessage.length();
     fullMessage = http1 + fullMessage;
+
+    //replace content length (217) with actual length including message
     fullMessage.replace(33,3, std::to_string(content_length));
 
     char tcp_server_message[2048];
     strcpy(tcp_server_message, fullMessage.c_str());
 
+    //for an invalid response
     char tcp_server_message_invalid[2048] = "HTTP/1.1 404 Object Not Found\r\nContent-Length: 210\r\nContent-Type: text/html; charset=utf-8\r\n\r\n<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"UTF-8\"/><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/><title>Highly sensitive data</title></head><body><p>Not found</p></body></html>";
 
     //create the server socket
@@ -50,6 +55,7 @@ int main(int argc, char const *argv[])
     //listen for simultaneous connections
     listen(tcp_server_socket, 5);  //which socket, how many connections
 
+    //create a client socket
     int tcp_client_socket;
     tcp_client_socket = accept(tcp_server_socket, NULL, NULL);  // server socket to interact with client, structure like before - if you know - else NULL for local connection
     
